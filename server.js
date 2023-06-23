@@ -10,11 +10,11 @@ app.use(express.json())
 let netBallAPI = []
 
 // Routes
-// app.get('/burgerLayers', (req, res) => {
-//   res.json({ burgerLayers })
-// })
+app.get('/netballAPI', (req, res) => {
+  res.json({ netBallAPI })
+})
 
-// app.post('/burgerLayers', (req, res) => {
+// app.post('/netball', (req, res) => {
 //   burgerLayers = req.body.burgerLayers
 //   res.json({ burgerLayers })
 // })
