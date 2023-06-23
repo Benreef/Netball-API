@@ -4,28 +4,47 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 
-
 router.post('/', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
 
   User
-    .findByEmail(email)
-    .then(user => {
-      if (!user || email == '' || password == '') {
-        res.status(400).json({ error: 'email or password are incorrect' })
-      } else {
-        // using bcrypt to validate the password:
+      .findByEmail(email) //from models/user
+      .then(user => {
+          const isValidPassword = bcrypt.compareSync(password, user.password_digest) //checking the password
 
-        const isValidPassword = bcrypt.compareSync(password, user.password_digest);
+          if (user && isValidPassword) {
+              //log the user in
+              req.session.userId = user.id  //it's storing the user Id in the session
+              res.json({
+                  userId: user.id,
+                  userName: user.name,
+                  email: user.email
+              }) //sending the user name back to the front-end
+          }
+      })
+})
 
-        if (user && isValidPassword) {
-          // log the user in
-          req.session.userId = user.id
-          res.json({ email: user.email, userId: user.id })
-        }
-      }
-    })
-});
+
+// router.post('/', (req, res) => {
+//   const { email, password } = req.body;
+
+//   User
+//     .findByEmail(email)
+//     .then(user => {
+//       if (!user || email == '' || password == '') {
+//         res.status(400).json({ error: 'email or password are incorrect' })
+//       } else {
+//         // using bcrypt to validate the password:
+//         const isValidPassword = bcrypt.compareSync(password, user.password_digest);
+
+//         if (user && isValidPassword) {
+//           // log the user in
+//           req.session.userId = user.id
+//           res.json({ email: user.email, userId: user.id })
+//         }
+//       }
+//     })
+// });
 
 router.get('/', (req, res) => {
   const userId = req.session.userId;
