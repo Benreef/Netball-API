@@ -1,20 +1,29 @@
 const express = require('express')
 const app = express()
-const PORT = 3001
+
+//middlewares
+const logger = require('./middlewares/logger')
+const sessions = require('./middlewares/sessions')
+
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => console.log(`Server is listening here: http://localhost:${PORT}`))
 
-app.use(express.json())
-
-// You can replace this with a database:
-let netBallAPI = []
-
+let netBallAPI = ['kai']
 // Routes
 app.get('/netballAPI', (req, res) => {
   res.json({ netBallAPI })
 })
 
-// app.post('/netball', (req, res) => {
-//   burgerLayers = req.body.burgerLayers
-//   res.json({ burgerLayers })
-// })
+//controllers
+const usersController = require('./controllers/users_controller')
+const sessionsController = require('./controllers/sessions_controller')
+
+app.use(logger)
+// app.use(express.static('client'))
+app.use(express.json())
+app.use(sessions)
+
+app.use('/api/users', usersController)
+
+app.use('/api/sessions', sessionsController)

@@ -15,7 +15,8 @@ router.post('/', (req, res) => {
         res.status(400).json({ error: 'email or password are incorrect' })
       } else {
         // using bcrypt to validate the password:
-        const isValidPassword = bcrypt.compareSync(password, user.password_digest)
+
+        const isValidPassword = bcrypt.compareSync(password, user.password_digest);
 
         if (user && isValidPassword) {
           // log the user in
@@ -51,11 +52,5 @@ router.delete('/', (req, res) => {
     };
   })
 });
-
-
-
-
-
-
 
 module.exports = router;

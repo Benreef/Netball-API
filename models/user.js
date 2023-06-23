@@ -25,7 +25,7 @@ const User = {
     },
 
     // this should take all of the signup inputs and create an entry in the users table in our DB
-    create: (username, first_name, last_name, email, passwordDigest) => {
+    create: (first_name, email, passwordDigest) => {
         const sql = `
         INSERT INTO users( first_name, email, password_digest)
         VALUES ($1, $2, $3)
