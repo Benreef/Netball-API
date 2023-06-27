@@ -5,57 +5,40 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 router.post('/', (req, res) => {
-  const { email, password } = req.body
+  const { userName, email, password } = req.body;
+  console.log(password)
 
-  User
-      .findByEmail(email) //from models/user
-      .then(user => {
-          const isValidPassword = bcrypt.compareSync(password, user.password_digest) //checking the password
+  User.findByEmail(email).then((user) => {
+    if (user === undefined || password === undefined) {
+      console.log(user)
+      res.json({ error: 'Please provide correct login information' });
+    } else {
+      // const isValidPassword = password
+      const isValidPassword = bcrypt.compareSync(
+        password,
+        user.password_digest
+      );
+      if (user && isValidPassword) {
+        req.session.userId = user.id;
+        res.json({
+          userId: user.id,
+          userName: user.first_name,
+          email: user.email,
+        });
+      }
+    }
+  });
+});
 
-          if (user && isValidPassword) {
-              //log the user in
-              req.session.userId = user.id  //it's storing the user Id in the session
-              res.json({
-                  userId: user.id,
-                  userName: user.name,
-                  email: user.email
-              }) //sending the user name back to the front-end
-          }
-      })
-})
-
-
-// router.post('/', (req, res) => {
-//   const { email, password } = req.body;
-
-//   User
-//     .findByEmail(email)
-//     .then(user => {
-//       if (!user || email == '' || password == '') {
-//         res.status(400).json({ error: 'email or password are incorrect' })
-//       } else {
-//         // using bcrypt to validate the password:
-//         const isValidPassword = bcrypt.compareSync(password, user.password_digest);
-
-//         if (user && isValidPassword) {
-//           // log the user in
-//           req.session.userId = user.id
-//           res.json({ email: user.email, userId: user.id })
-//         }
-//       }
-//     })
-// });
 
 router.get('/', (req, res) => {
   const userId = req.session.userId;
-  // if logged in:
+
   if (userId) {
-    // debug: console.log("UserId ", userId)
-    User
-      .findById(userId)
-      .then(email => res.json({ result: 'successful', email: email, userId: userId }))
+    User.findById(userId)
+      .then(email => res.json({ result: 'successful', email: email, userId: userId }));
   } else {
-    res.json({})
+    res.json({});
   }
 });
 
@@ -67,9 +50,9 @@ router.delete('/', (req, res) => {
       res.clearCookie('user_sid');
       res.json({
         message: 'successful'
-      })
-    };
-  })
+      });
+    }
+  });
 });
 
 module.exports = router;

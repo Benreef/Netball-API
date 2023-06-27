@@ -5,11 +5,13 @@ CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     first_name TEXT,
     email TEXT,
-    password_digest TEXT
+    password_digest varchar(255)
 );
 
 CREATE TABLE teams (
   team_id SERIAL PRIMARY KEY,
+  team_name VARCHAR(255),
+  coach_name VARCHAR(255),
   player_name VARCHAR(255),
   preferred_position VARCHAR(255)
 );

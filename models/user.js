@@ -3,6 +3,7 @@ const db = require('../db/db')
 const User = {
     // Setting up the findByEmail function
     findByEmail: email => {
+        console.log('findByEmail called with email:', email);
         const sql = `
         SELECT * FROM users
         WHERE email = $1
@@ -10,7 +11,9 @@ const User = {
 
         return db
             .query(sql, [email])
-            .then(dbRes => dbRes.rows[0])
+            .then(dbRes => {
+                console.log('findByEmail result:', dbRes.rows[0]);
+                dbRes.rows[0]})
     },
     // Setting up the findById function
     findById: id => {
@@ -34,7 +37,7 @@ const User = {
         // Have it set to return all, could modify to return less later if we don't use the information anywhere
         return db
             .query(sql, [ first_name, email, passwordDigest])
-            .then(dbRes => dbRes.rows[0].email)
+            .then(dbRes => dbRes.rows[0])
     }
 }
 
