@@ -11,11 +11,15 @@ CREATE TABLE users(
 CREATE TABLE teams (
   team_id SERIAL PRIMARY KEY,
   team_name VARCHAR(255),
-  coach_name VARCHAR(255),
+  coach_name VARCHAR(255)
+);
+
+CREATE TABLE players (
+  player_id SERIAL PRIMARY KEY,
+  team_id INTEGER REFERENCES teams(team_id),
   player_name VARCHAR(255),
   preferred_position VARCHAR(255)
 );
-
 CREATE TABLE games (
   game_id SERIAL PRIMARY KEY,
   team_id INT REFERENCES teams(team_id),
