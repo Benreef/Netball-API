@@ -43,27 +43,27 @@ CREATE TABLE game_data (
 );
 
 
-CREATE TABLE intercepts (
-  intercept_id SERIAL PRIMARY KEY,
-  game_id INT REFERENCES games(game_id),
-  player_id INT REFERENCES players(player_id),
-  quarter INT,
-  position VARCHAR(255)
-);
+-- CREATE TABLE intercepts (
+--   intercept_id SERIAL PRIMARY KEY,
+--   game_id INT REFERENCES games(game_id),
+--   player_id INT REFERENCES players(player_id),
+--   quarter INT,
+--   position VARCHAR(255)
+-- );
 
-CREATE TABLE center_pass (
-  center_pass_id SERIAL PRIMARY KEY,
-  game_id INT REFERENCES games(game_id),
-  player_id INT REFERENCES players(player_id),
-  quarter INT,
-  position VARCHAR(255)
-);
+-- CREATE TABLE center_pass (
+--   center_pass_id SERIAL PRIMARY KEY,
+--   game_id INT REFERENCES games(game_id),
+--   player_id INT REFERENCES players(player_id),
+--   quarter INT,
+--   position VARCHAR(255)
+-- );
 
-CREATE TABLE shooting_stats (
-  shooting_id SERIAL PRIMARY KEY,
-  game_id INT REFERENCES games(game_id),
-  player_id INT REFERENCES players(player_id),
-  quarter INT,
-  goals INT,
-  missed INT
-);
+-- CREATE TABLE shooting_stats (
+--   shooting_id SERIAL PRIMARY KEY,
+--   game_id INT REFERENCES games(game_id),
+--   player_id INT REFERENCES players(player_id),
+--   quarter INT,
+--   goals INT,
+--   missed INT
+-- );

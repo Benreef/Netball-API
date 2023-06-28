@@ -29,7 +29,7 @@ app.use('/api/sessions', sessionsController)
 app.use('/api/scoring', scoringController)
 app.use('/api/teams', teamsController)
 app.use('/api/games', gamesController)
-app.use('/api/submit_data', dataController)
+app.use('submit_data', dataController)
 
 
 // if (process.env.NODE_ENV === 'production') {
