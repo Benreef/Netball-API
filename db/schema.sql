@@ -29,6 +29,20 @@ CREATE TABLE games (
   opposition_result INT
 );
 
+CREATE TABLE game_data (
+  id SERIAL PRIMARY KEY,
+  game_id INT REFERENCES games(game_id),
+  player_id INT REFERENCES players(player_id),
+  quarter INT,
+  home_score INT,
+  home_missed INT,
+  opposition_score INT,
+  opposition_missed INT,
+  intercepts INT,
+  center_passes INT
+);
+
+
 CREATE TABLE intercepts (
   intercept_id SERIAL PRIMARY KEY,
   game_id INT REFERENCES games(game_id),

@@ -71,43 +71,40 @@ const db = require('../db/db')
 const Game = require('../models/game');
 const Player = require('../models/player');
 const Score = require('../models/score');
-// const Intercept = require('../models/intercept');
-// const CenterPass = require('../models/center_pass');
-// const Teams = require('../models/team');
+const Intercept = require('../models/intercept');
+const CenterPass = require('../models/center_pass');
+const Teams = require('../models/team');
+   
+// Store intercept data in the database
+router.post('/api/intercepts', (req, res) => {
+  const { game_id, player_id, quarter, position } = req.body;
 
-// // Store intercept data in the database
-// router.post('/api/intercepts', (req, res) => {
-//   const { gameId, playerId, quarter, position } = req.body;
+  Game.findById(game_id)
+    .then(game => game.home_team_id)
+    .then(teamId =>
+      Player.findById(player_id)
+        .then(player =>
+          Intercept.create(game_id, player_id, quarter, position)
+            .then(() => res.json({ message: 'Intercept data stored successfully' }))
+        )
+    )
+});
 
-//   Game.findById(gameId)
-//     .then(game => game.teamId)
-//     .then(teamId =>
-//       Player.findById(playerId)
-//         .then(player =>
-//           Intercept.create(gameId, playerId, quarter, position)
-//             .then(() => res.json({ message: 'Intercept data stored successfully' }))
-//         )
-//     )
-// });
 
-// // Store center pass data in the database
-// router.post('/api/center_pass', (req, res) => {
-//   const { gameId, playerId, quarter, position } = req.body;
+// Store center pass data in the database
+router.post('/api/center_passes', (req, res) => {
+  const { game_id, player_id, quarter, position } = req.body;
 
-//   Game.findById(gameId)
-//     .then(game => game.teamId)
-//     .then(teamId =>
-//       Player.findById(playerId)
-//         .then(player =>
-//           CenterPass.create(gameId, playerId, quarter, position)
-//             .then(() => res.json({ message: 'Center pass data stored successfully' }))
-//         )
-//     )
-//     .catch(error => {
-//       console.error('Error storing center pass data:', error);
-//       res.status(500).json({ error: 'An error occurred while storing center pass data' });
-//     });
-// });
+  Game.findById(game_id)
+    .then(game => game.home_team_id)
+    .then(teamId =>
+      Player.findById(player_id)
+        .then(player =>
+          CenterPass.create(game_id, player_id, quarter, position)
+            .then(() => res.json({ message: 'Center pass data stored successfully' }))
+        )
+    )
+});
 
 // Store score data in the database
 router.post('/', (req, res) => {
@@ -115,29 +112,34 @@ router.post('/', (req, res) => {
   Game
     .findById(gameId)
     .then(game => {
-      const teamId = game.teamId;
+      // const teamId = game.teamId;
       return Player.findById(playerId)
         .then(player => {
-          const playerType = player.position === 'GA' ? 'GA' : 'GS';
+          const playerType = player.preferred_position === 'GA' ? 'GA' : 'GS';
           return Score.create(gameId, playerId, quarter, teamId, scored ? 1 : 0, scored ? 0 : 1, playerType)})
         })
-    .then(() => res.json({ success: true }))
-    .catch(error => res.json({ success: false, error: error.message }));
 })
-// // Store game data in the database
-// router.post('/api/games', (req, res) => {
-//   const { gameId, teamId, result, score } = req.body;
+// Store game data in the database
+router.post('/api/games', (req, res) => {
+  const { gameId, teamId, result, score } = req.body;
 
-//   Game.findById(gameId)
-//     .then(game =>
-//       Game.update(gameId, teamId, result, score)
-//         .then(() => res.json({ message: 'Game data stored successfully' }))
-//     )
-//     .catch(error => {
-//       console.error('Error storing game data:', error);
-//       res.status(500).json({ error: 'An error occurred while storing game data' });
-//     });
-// });
+  Game.findById(gameId)
+    .then(game =>
+      Game.update(gameId, teamId, result, score)
+        .then(() => res.json({ message: 'Game data stored successfully' }))
+    )
+});
+
+router.post('/api/games', (req, res) => {
+  const { game_id, player_id, quarter } = req.body;
+
+  Game
+    .findById(game_id)
+    .then(game =>
+      Game.update(game_id, game.home_team_id, game.opposition_team_id, game.home_result, game.opposition_result)
+        .then(() => res.json({ message: 'Game data stored successfully' }))
+    )
+});
 
 
 

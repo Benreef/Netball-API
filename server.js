@@ -9,7 +9,8 @@ const usersController = require('./controllers/users_controller')
 const sessionsController = require('./controllers/sessions_controller')
 const scoringController = require('./controllers/scoring_controller')
 const teamsController = require('./controllers/teams_controller');
-
+const gamesController = require('./controllers/games_controller');
+const dataController = require('./controllers/data_controller')
 
 const app = express();
 
@@ -27,16 +28,18 @@ app.use('/api/users', usersController)
 app.use('/api/sessions', sessionsController)
 app.use('/api/scoring', scoringController)
 app.use('/api/teams', teamsController)
+app.use('/api/games', gamesController)
+app.use('/api/submit_data', dataController)
 
 
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path')
-  app.use(express.static(path.join(__dirname, 'build')));
+// if (process.env.NODE_ENV === 'production') {
+//   const path = require('path')
+//   app.use(express.static(path.join(__dirname, 'build')));
 
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
-}
+//   app.get('/*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+//   });
+// }
 
 // let netBallAPI = []
 
